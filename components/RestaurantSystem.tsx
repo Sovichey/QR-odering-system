@@ -13,14 +13,33 @@ const TABLE_NUMBER_STORAGE_KEY = "restaurant_table_number";
 const CART_STORAGE_KEY = "restaurant_cart";
 const CURRENT_VIEW_STORAGE_KEY = "restaurant_current_view";
 
-function RestaurantContent({
+function StaffContent({
+  currentView,
+  onLogout,
+}: {
+  currentView: ViewType;
+  onLogout: () => void;
+}) {
+  return (
+    <RestaurantProvider initialTableNumber={0}>
+      <>
+        {currentView === "kitchen" && <KitchenView onLogout={onLogout} />}
+        {currentView === "admin" && <AdminDashboard onLogout={onLogout} />}
+      </>
+    </RestaurantProvider>
+  );
+}
+
+function CustomerContent({
   onChangeTable,
   currentView: initialView,
   onViewChange,
+  onStaffLoginClick,
 }: {
   onChangeTable: () => void;
   currentView: ViewType;
   onViewChange: (view: ViewType) => void;
+  onStaffLoginClick: () => void;
 }) {
   const [currentView, setCurrentView] = useState<ViewType>(initialView);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
@@ -34,10 +53,6 @@ function RestaurantContent({
     handleViewChange(role);
   };
 
-  const handleLogout = () => {
-    handleViewChange("menu");
-  };
-
   return (
     <>
       {currentView === "menu" && (
@@ -46,8 +61,6 @@ function RestaurantContent({
           onChangeTable={onChangeTable}
         />
       )}
-      {currentView === "kitchen" && <KitchenView onLogout={handleLogout} />}
-      {currentView === "admin" && <AdminDashboard onLogout={handleLogout} />}
 
       <StaffLoginModal
         open={loginModalOpen}
@@ -62,6 +75,7 @@ export function RestaurantSystem() {
   const [tableNumber, setTableNumber] = useState<number | null>(null);
   const [currentView, setCurrentView] = useState<ViewType>("menu");
   const [isHydrated, setIsHydrated] = useState(false);
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
 
   // Load table number and view from localStorage on mount
   useEffect(() => {
@@ -91,6 +105,21 @@ export function RestaurantSystem() {
     localStorage.setItem(CURRENT_VIEW_STORAGE_KEY, "menu");
   };
 
+  const handleStaffLogin = (role: "kitchen" | "admin") => {
+    setCurrentView(role);
+    localStorage.setItem(CURRENT_VIEW_STORAGE_KEY, role);
+    setLoginModalOpen(false);
+  };
+
+  const handleLogout = () => {
+    // Go back to table input screen
+    setTableNumber(null);
+    setCurrentView("menu");
+    localStorage.removeItem(TABLE_NUMBER_STORAGE_KEY);
+    localStorage.removeItem(CART_STORAGE_KEY);
+    localStorage.removeItem(CURRENT_VIEW_STORAGE_KEY);
+  };
+
   const handleChangeTable = () => {
     setTableNumber(null);
     setCurrentView("menu");
@@ -109,17 +138,36 @@ export function RestaurantSystem() {
     return null;
   }
 
-  // Show table number input first, then the restaurant content
-  if (tableNumber === null) {
-    return <TableNumberInput onTableNumberSet={handleTableNumberSet} />;
+  // Show table number input first, then decide between customer or staff
+  if (tableNumber === null && (currentView === "menu" || !currentView)) {
+    return (
+      <>
+        <TableNumberInput
+          onTableNumberSet={handleTableNumberSet}
+          onStaffLogin={() => setLoginModalOpen(true)}
+        />
+        <StaffLoginModal
+          open={loginModalOpen}
+          onOpenChange={setLoginModalOpen}
+          onLogin={handleStaffLogin}
+        />
+      </>
+    );
   }
 
+  // Staff views (kitchen/admin) need RestaurantProvider for data access
+  if (currentView === "kitchen" || currentView === "admin") {
+    return <StaffContent currentView={currentView} onLogout={handleLogout} />;
+  }
+
+  // Customer view needs RestaurantProvider
   return (
-    <RestaurantProvider initialTableNumber={tableNumber}>
-      <RestaurantContent
+    <RestaurantProvider initialTableNumber={tableNumber || 1}>
+      <CustomerContent
         onChangeTable={handleChangeTable}
         currentView={currentView}
         onViewChange={handleViewChange}
+        onStaffLoginClick={() => setLoginModalOpen(true)}
       />
     </RestaurantProvider>
   );

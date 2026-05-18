@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { QrCode, ArrowRight, Check } from "lucide-react";
+import { QrCode, ArrowRight, Check, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -9,9 +9,13 @@ import { cn } from "@/lib/utils";
 
 interface TableNumberInputProps {
   onTableNumberSet: (tableNumber: number) => void;
+  onStaffLogin: () => void;
 }
 
-export function TableNumberInput({ onTableNumberSet }: TableNumberInputProps) {
+export function TableNumberInput({
+  onTableNumberSet,
+  onStaffLogin,
+}: TableNumberInputProps) {
   const [tableNumber, setTableNumber] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -142,14 +146,27 @@ export function TableNumberInput({ onTableNumberSet }: TableNumberInputProps) {
           </Button>
 
           {/* Footer Info */}
-          <div className="text-center space-y-2 pt-4 border-t border-border/50">
-            <p className="text-xs text-muted-foreground">
-              💡 <span className="font-medium">Tip:</span> Scan the QR code on
-              your table to get here
-            </p>
-            <p className="text-xs text-muted-foreground">
-              This number helps us track your order
-            </p>
+          <div className="text-center space-y-4 pt-4 border-t border-border/50">
+            <div className="space-y-2">
+              <p className="text-xs text-muted-foreground">
+                💡 <span className="font-medium">Tip:</span> Scan the QR code on
+                your table to get here
+              </p>
+              <p className="text-xs text-muted-foreground">
+                This number helps us track your order
+              </p>
+            </div>
+
+            {/* Staff Login Button */}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onStaffLogin}
+              className="w-full gap-2 text-xs font-medium"
+            >
+              <Lock className="h-3.5 w-3.5" />
+              Staff Login (PIN)
+            </Button>
           </div>
         </div>
       </Card>
