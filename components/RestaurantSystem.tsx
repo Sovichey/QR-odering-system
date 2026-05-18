@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { RestaurantProvider } from "@/context/RestaurantContext";
 import { CustomerMenuView } from "@/components/views/CustomerMenuView";
 import { KitchenView } from "@/components/views/KitchenView";
@@ -9,7 +9,10 @@ import { StaffLoginModal } from "@/components/staff/StaffLoginModal";
 import { TableNumberInput } from "@/components/TableNumberInput";
 import { ViewType } from "@/lib/types";
 
-function RestaurantContent() {
+const TABLE_NUMBER_STORAGE_KEY = "restaurant_table_number";
+const CART_STORAGE_KEY = "restaurant_cart";
+
+function RestaurantContent({ onChangeTable }: { onChangeTable: () => void }) {
   const [currentView, setCurrentView] = useState<ViewType>("menu");
   const [loginModalOpen, setLoginModalOpen] = useState(false);
 
@@ -24,7 +27,10 @@ function RestaurantContent() {
   return (
     <>
       {currentView === "menu" && (
-        <CustomerMenuView onStaffLogin={() => setLoginModalOpen(true)} />
+        <CustomerMenuView
+          onStaffLogin={() => setLoginModalOpen(true)}
+          onChangeTable={onChangeTable}
+        />
       )}
       {currentView === "kitchen" && <KitchenView onLogout={handleLogout} />}
       {currentView === "admin" && <AdminDashboard onLogout={handleLogout} />}
@@ -40,15 +46,41 @@ function RestaurantContent() {
 
 export function RestaurantSystem() {
   const [tableNumber, setTableNumber] = useState<number | null>(null);
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  // Load table number from localStorage on mount
+  useEffect(() => {
+    const savedTableNumber = localStorage.getItem(TABLE_NUMBER_STORAGE_KEY);
+    if (savedTableNumber) {
+      setTableNumber(parseInt(savedTableNumber, 10));
+    }
+    setIsHydrated(true);
+  }, []);
+
+  const handleTableNumberSet = (num: number) => {
+    setTableNumber(num);
+    localStorage.setItem(TABLE_NUMBER_STORAGE_KEY, num.toString());
+  };
+
+  const handleChangeTable = () => {
+    setTableNumber(null);
+    localStorage.removeItem(TABLE_NUMBER_STORAGE_KEY);
+    localStorage.removeItem(CART_STORAGE_KEY);
+  };
+
+  // Wait for hydration to avoid hydration mismatch
+  if (!isHydrated) {
+    return null;
+  }
 
   // Show table number input first, then the restaurant content
   if (tableNumber === null) {
-    return <TableNumberInput onTableNumberSet={setTableNumber} />;
+    return <TableNumberInput onTableNumberSet={handleTableNumberSet} />;
   }
 
   return (
     <RestaurantProvider initialTableNumber={tableNumber}>
-      <RestaurantContent />
+      <RestaurantContent onChangeTable={handleChangeTable} />
     </RestaurantProvider>
   );
 }

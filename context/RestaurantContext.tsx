@@ -80,6 +80,8 @@ const RestaurantContext = createContext<RestaurantContextType | undefined>(
   undefined,
 );
 
+const CART_STORAGE_KEY = "restaurant_cart";
+
 export function RestaurantProvider({
   children,
   initialTableNumber = 4,
@@ -93,6 +95,41 @@ export function RestaurantProvider({
   const [completedOrders, setCompletedOrders] = useState<Order[]>([]); // Start empty, use Firestore as source
   const [tableNumber] = useState(initialTableNumber);
   const [orderNote, setOrderNote] = useState("");
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  // Load cart from localStorage on mount
+  useEffect(() => {
+    try {
+      const savedCart = localStorage.getItem(CART_STORAGE_KEY);
+      if (savedCart) {
+        const parsedCart = JSON.parse(savedCart);
+        // Restore meal objects from mockMeals
+        const hydratedCart = parsedCart
+          .map((item: any) => {
+            const meal = meals.find((m) => m.id === item.meal.id);
+            return meal ? { ...item, meal } : null;
+          })
+          .filter((item: CartItem | null) => item !== null);
+        setCart(hydratedCart);
+        console.log("🛒 Cart restored from localStorage:", hydratedCart);
+      }
+    } catch (error) {
+      console.error("Error loading cart from localStorage:", error);
+    }
+    setIsHydrated(true);
+  }, [meals]);
+
+  // Save cart to localStorage whenever it changes (only after hydration)
+  useEffect(() => {
+    if (isHydrated) {
+      try {
+        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+        console.log("💾 Cart saved to localStorage:", cart);
+      } catch (error) {
+        console.error("Error saving cart to localStorage:", error);
+      }
+    }
+  }, [cart, isHydrated]);
 
   // Calculate metrics
   const metrics: Metrics = {
@@ -177,8 +214,9 @@ export function RestaurantProvider({
       console.log("💾 Saving order to Firestore:", newOrderData);
       await addDoc(collection(db, "orders"), newOrderData);
 
-      // Clear cart immediately
+      // Clear cart and localStorage
       setCart([]);
+      localStorage.removeItem(CART_STORAGE_KEY);
       setOrderNote("");
       console.log("✅ Order placed and saved to Firestore");
     } catch (error) {

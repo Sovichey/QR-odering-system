@@ -10,9 +10,13 @@ import { ActiveOrders } from "@/components/customer/ActiveOrders";
 
 interface CustomerMenuViewProps {
   onStaffLogin: () => void;
+  onChangeTable: () => void;
 }
 
-export function CustomerMenuView({ onStaffLogin }: CustomerMenuViewProps) {
+export function CustomerMenuView({
+  onStaffLogin,
+  onChangeTable,
+}: CustomerMenuViewProps) {
   const { meals } = useRestaurant();
   const [activeCategory, setActiveCategory] = useState<Category>("All");
   const [cartOpen, setCartOpen] = useState(false);
@@ -24,6 +28,7 @@ export function CustomerMenuView({ onStaffLogin }: CustomerMenuViewProps) {
         onCartClick={() => setCartOpen(true)}
         onOrdersClick={() => setOrdersOpen(true)}
         onStaffLogin={onStaffLogin}
+        onChangeTable={onChangeTable}
       />
       <MenuCategories
         activeCategory={activeCategory}
