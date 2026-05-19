@@ -1,78 +1,81 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { ChefHat, LayoutDashboard, Lock, Eye, EyeOff } from "lucide-react"
+import { useState } from "react";
+import { ChefHat, LayoutDashboard, Lock, Eye, EyeOff } from "lucide-react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 
-type StaffRole = "kitchen" | "admin"
+type StaffRole = "kitchen" | "admin";
 
 interface StaffLoginModalProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  onLogin: (role: StaffRole) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onLogin: (role: StaffRole) => void;
 }
 
 // Demo credentials for demonstration
 const DEMO_CREDENTIALS = {
   kitchen: { pin: "1234" },
   admin: { pin: "0000" },
-}
+};
 
-export function StaffLoginModal({ open, onOpenChange, onLogin }: StaffLoginModalProps) {
-  const [selectedRole, setSelectedRole] = useState<StaffRole | null>(null)
-  const [pin, setPin] = useState("")
-  const [showPin, setShowPin] = useState(false)
-  const [error, setError] = useState("")
+export function StaffLoginModal({
+  open,
+  onOpenChange,
+  onLogin,
+}: StaffLoginModalProps) {
+  const [selectedRole, setSelectedRole] = useState<StaffRole | null>(null);
+  const [pin, setPin] = useState("");
+  const [showPin, setShowPin] = useState(false);
+  const [error, setError] = useState("");
 
   const handleRoleSelect = (role: StaffRole) => {
-    setSelectedRole(role)
-    setPin("")
-    setError("")
-  }
+    setSelectedRole(role);
+    setPin("");
+    setError("");
+  };
 
   const handleLogin = () => {
-    if (!selectedRole) return
+    if (!selectedRole) return;
 
-    const correctPin = DEMO_CREDENTIALS[selectedRole].pin
+    const correctPin = DEMO_CREDENTIALS[selectedRole].pin;
     if (pin === correctPin) {
-      onLogin(selectedRole)
-      onOpenChange(false)
+      onLogin(selectedRole);
+      onOpenChange(false);
       // Reset state
-      setSelectedRole(null)
-      setPin("")
-      setError("")
+      setSelectedRole(null);
+      setPin("");
+      setError("");
     } else {
-      setError("Incorrect PIN. Please try again.")
+      setError("Incorrect PIN. Please try again.");
     }
-  }
+  };
 
   const handleClose = () => {
-    onOpenChange(false)
-    setSelectedRole(null)
-    setPin("")
-    setError("")
-  }
+    onOpenChange(false);
+    setSelectedRole(null);
+    setPin("");
+    setError("");
+  };
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[400px]">
-        <DialogHeader>
-          <DialogTitle className="text-xl">Staff Login</DialogTitle>
+        <DialogHeader className="sr-only">
+          <DialogTitle>Staff Login</DialogTitle>
           <DialogDescription>
             Select your role and enter your PIN to access the staff dashboard.
           </DialogDescription>
         </DialogHeader>
-
         {!selectedRole ? (
           <div className="grid grid-cols-2 gap-4 py-4">
             <button
@@ -80,7 +83,7 @@ export function StaffLoginModal({ open, onOpenChange, onLogin }: StaffLoginModal
               className={cn(
                 "flex flex-col items-center gap-3 p-6 rounded-xl border-2 transition-all",
                 "hover:border-blue-400 hover:bg-blue-50/50",
-                "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2",
               )}
             >
               <div className="h-14 w-14 rounded-full bg-blue-100 flex items-center justify-center">
@@ -88,7 +91,9 @@ export function StaffLoginModal({ open, onOpenChange, onLogin }: StaffLoginModal
               </div>
               <div className="text-center">
                 <p className="font-semibold text-foreground">Kitchen</p>
-                <p className="text-xs text-muted-foreground">View and manage orders</p>
+                <p className="text-xs text-muted-foreground">
+                  View and manage orders
+                </p>
               </div>
             </button>
 
@@ -97,7 +102,7 @@ export function StaffLoginModal({ open, onOpenChange, onLogin }: StaffLoginModal
               className={cn(
                 "flex flex-col items-center gap-3 p-6 rounded-xl border-2 transition-all",
                 "hover:border-emerald-400 hover:bg-emerald-50/50",
-                "focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                "focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2",
               )}
             >
               <div className="h-14 w-14 rounded-full bg-emerald-100 flex items-center justify-center">
@@ -105,7 +110,9 @@ export function StaffLoginModal({ open, onOpenChange, onLogin }: StaffLoginModal
               </div>
               <div className="text-center">
                 <p className="font-semibold text-foreground">Admin</p>
-                <p className="text-xs text-muted-foreground">Dashboard and analytics</p>
+                <p className="text-xs text-muted-foreground">
+                  Dashboard and analytics
+                </p>
               </div>
             </button>
           </div>
@@ -115,19 +122,25 @@ export function StaffLoginModal({ open, onOpenChange, onLogin }: StaffLoginModal
               <div
                 className={cn(
                   "h-10 w-10 rounded-full flex items-center justify-center",
-                  selectedRole === "kitchen" ? "bg-blue-100" : "bg-emerald-100"
+                  selectedRole === "kitchen" ? "bg-blue-100" : "bg-emerald-100",
                 )}
               >
                 {selectedRole === "kitchen" ? (
                   <ChefHat className={cn("h-5 w-5", "text-blue-600")} />
                 ) : (
-                  <LayoutDashboard className={cn("h-5 w-5", "text-emerald-600")} />
+                  <LayoutDashboard
+                    className={cn("h-5 w-5", "text-emerald-600")}
+                  />
                 )}
               </div>
               <div>
-                <p className="font-medium text-foreground capitalize">{selectedRole}</p>
+                <p className="font-medium text-foreground capitalize">
+                  {selectedRole}
+                </p>
                 <p className="text-xs text-muted-foreground">
-                  {selectedRole === "kitchen" ? "Kitchen Staff" : "Administrator"}
+                  {selectedRole === "kitchen"
+                    ? "Kitchen Staff"
+                    : "Administrator"}
                 </p>
               </div>
               <Button
@@ -152,12 +165,12 @@ export function StaffLoginModal({ open, onOpenChange, onLogin }: StaffLoginModal
                   placeholder="Enter 4-digit PIN"
                   value={pin}
                   onChange={(e) => {
-                    setPin(e.target.value.slice(0, 4))
-                    setError("")
+                    setPin(e.target.value.slice(0, 4));
+                    setError("");
                   }}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && pin.length === 4) {
-                      handleLogin()
+                      handleLogin();
                     }
                   }}
                   className="pr-10"
@@ -170,7 +183,11 @@ export function StaffLoginModal({ open, onOpenChange, onLogin }: StaffLoginModal
                   onClick={() => setShowPin(!showPin)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  {showPin ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPin ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                 </button>
               </div>
               {error && <p className="text-sm text-destructive">{error}</p>}
@@ -186,7 +203,7 @@ export function StaffLoginModal({ open, onOpenChange, onLogin }: StaffLoginModal
                 "w-full",
                 selectedRole === "kitchen"
                   ? "bg-blue-600 hover:bg-blue-700"
-                  : "bg-emerald-600 hover:bg-emerald-700"
+                  : "bg-emerald-600 hover:bg-emerald-700",
               )}
             >
               Sign In
@@ -195,5 +212,5 @@ export function StaffLoginModal({ open, onOpenChange, onLogin }: StaffLoginModal
         )}
       </DialogContent>
     </Dialog>
-  )
+  );
 }
