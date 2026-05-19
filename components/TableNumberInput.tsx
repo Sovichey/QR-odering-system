@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { QrCode, ArrowRight, Check, Lock } from "lucide-react";
+import Image from "next/image";
+import { ArrowRight, Check, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -64,12 +65,16 @@ export function TableNumberInput({
           {/* Header */}
           <div className="text-center space-y-3">
             <div className="flex justify-center mb-4">
-              <div className="h-16 w-16 rounded-2xl bg-primary/10 flex items-center justify-center">
-                <QrCode className="h-8 w-8 text-primary" />
-              </div>
+              <Image
+                src="/foodfavicon.png"
+                alt="QUICKBITE Logo"
+                width={64}
+                height={64}
+                className="rounded-2xl"
+              />
             </div>
             <h1 className="text-3xl font-bold font-serif text-foreground">
-              Welcome
+              QUICKBITE
             </h1>
             <p className="text-muted-foreground">
               Enter your table number to get started
