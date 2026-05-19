@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: "TableServe - Restaurant Ordering System",
   description:
     "QR-code based restaurant ordering system for seamless dining experience",
-  generator: "v0.app",
+  generator: "Next.js",
   icons: {
     icon: "/foodfavicon.png",
     apple: "/foodfavicon.png",
