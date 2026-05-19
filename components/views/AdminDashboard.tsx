@@ -93,17 +93,17 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <LayoutDashboard className="h-5 w-5 text-primary" />
+        <div className="container mx-auto px-4 py-3 md:py-4">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
+              <div className="h-8 md:h-10 w-8 md:w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <LayoutDashboard className="h-4 md:h-5 w-4 md:w-5 text-primary" />
               </div>
-              <div>
-                <h1 className="text-2xl font-bold text-foreground">
+              <div className="min-w-0">
+                <h1 className="text-lg md:text-2xl font-bold text-foreground truncate">
                   Admin Dashboard
                 </h1>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-xs md:text-sm text-muted-foreground truncate">
                   Restaurant overview and analytics
                 </p>
               </div>
@@ -111,11 +111,11 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
             <Button
               variant="outline"
               size="sm"
-              className="gap-2 text-muted-foreground hover:text-foreground"
+              className="gap-1 md:gap-2 text-muted-foreground hover:text-foreground flex-shrink-0 text-xs md:text-sm px-2 md:px-3"
               onClick={onLogout}
             >
-              <LogOut className="h-4 w-4" />
-              Logout
+              <LogOut className="h-3 md:h-4 w-3 md:w-4" />
+              <span className="hidden sm:inline">Logout</span>
             </Button>
           </div>
         </div>
@@ -159,58 +159,72 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
             <CardTitle>Order History</CardTitle>
           </CardHeader>
           <CardContent>
-            <ScrollArea className="h-[400px] w-full">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[120px]">Order ID</TableHead>
-                    <TableHead>Table #</TableHead>
-                    <TableHead>Items</TableHead>
-                    <TableHead className="text-right">Total</TableHead>
-                    <TableHead>Time</TableHead>
-                    <TableHead>Status</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {allOrders.map((order) => (
-                    <TableRow key={order.id}>
-                      <TableCell className="font-mono text-sm">
-                        {order.id.slice(0, 12).toUpperCase()}
-                      </TableCell>
-                      <TableCell className="font-medium">
-                        {order.tableNumber || "-"}
-                      </TableCell>
-                      <TableCell className="max-w-[200px]">
-                        <span className="text-sm text-muted-foreground truncate block">
-                          {order.items && order.items.length > 0
-                            ? order.items
-                                .map(
-                                  (item) =>
-                                    `${item.quantity}x ${item.mealName}`,
-                                )
-                                .join(", ")
-                            : "No items"}
-                        </span>
-                      </TableCell>
-                      <TableCell className="text-right font-medium">
-                        {formatCurrency(order.totalPrice)}
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {formatTimestamp(order.createdAt)}
-                      </TableCell>
-                      <TableCell>
-                        <Badge
-                          variant="secondary"
-                          className={statusConfig[order.status].className}
-                        >
-                          {order.status}
-                        </Badge>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </ScrollArea>
+            <div className="w-full overflow-x-auto rounded-md border">
+              <div className="h-[400px] overflow-y-auto">
+                <table className="w-full min-w-max">
+                  <thead className="sticky top-0 bg-background">
+                    <tr className="border-b">
+                      <th className="px-4 py-2 text-left text-sm font-medium text-foreground whitespace-nowrap w-[120px]">
+                        Order ID
+                      </th>
+                      <th className="px-4 py-2 text-left text-sm font-medium text-foreground whitespace-nowrap">
+                        Table #
+                      </th>
+                      <th className="px-4 py-2 text-left text-sm font-medium text-foreground whitespace-nowrap">
+                        Items
+                      </th>
+                      <th className="px-4 py-2 text-right text-sm font-medium text-foreground whitespace-nowrap">
+                        Total
+                      </th>
+                      <th className="px-4 py-2 text-left text-sm font-medium text-foreground whitespace-nowrap">
+                        Time
+                      </th>
+                      <th className="px-4 py-2 text-left text-sm font-medium text-foreground whitespace-nowrap">
+                        Status
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {allOrders.map((order) => (
+                      <tr key={order.id} className="border-b hover:bg-muted/50">
+                        <td className="px-4 py-2 font-mono text-sm whitespace-nowrap">
+                          {order.id.slice(0, 12).toUpperCase()}
+                        </td>
+                        <td className="px-4 py-2 font-medium whitespace-nowrap">
+                          {order.tableNumber || "-"}
+                        </td>
+                        <td className="px-4 py-2 text-sm text-muted-foreground">
+                          <span className="truncate block max-w-[200px]">
+                            {order.items && order.items.length > 0
+                              ? order.items
+                                  .map(
+                                    (item) =>
+                                      `${item.quantity}x ${item.mealName}`,
+                                  )
+                                  .join(", ")
+                              : "No items"}
+                          </span>
+                        </td>
+                        <td className="px-4 py-2 text-right font-medium whitespace-nowrap">
+                          {formatCurrency(order.totalPrice)}
+                        </td>
+                        <td className="px-4 py-2 text-muted-foreground whitespace-nowrap">
+                          {formatTimestamp(order.createdAt)}
+                        </td>
+                        <td className="px-4 py-2 whitespace-nowrap">
+                          <Badge
+                            variant="secondary"
+                            className={statusConfig[order.status].className}
+                          >
+                            {order.status}
+                          </Badge>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </main>

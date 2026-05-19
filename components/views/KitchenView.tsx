@@ -102,6 +102,21 @@ function OrderCard({
               </div>
             ))}
           </div>
+          {order.note && (
+            <div className="mt-2 p-2 md:p-3 rounded-lg bg-amber-50 border border-amber-200 w-fit">
+              <div className="flex items-start gap-2">
+                <MessageSquare className="h-3 md:h-4 w-3 md:w-4 text-amber-600 mt-0.5 flex-shrink-0" />
+                <div className="min-w-0 flex-1">
+                  <p className="text-[10px] md:text-xs font-medium text-amber-800 mb-0.5">
+                    Special Instructions
+                  </p>
+                  <p className="text-[10px] md:text-sm text-amber-700 break-words whitespace-normal">
+                    {order.note}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Right Section: Status, Total, Button */}
@@ -270,31 +285,31 @@ export function KitchenView({ onLogout }: KitchenViewProps) {
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <ChefHat className="h-5 w-5 text-primary" />
+        <div className="container mx-auto px-4 py-3 md:py-4">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2 md:gap-3 min-w-0">
+              <div className="h-8 md:h-10 w-8 md:w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <ChefHat className="h-4 md:h-5 w-4 md:w-5 text-primary" />
               </div>
-              <div>
-                <h1 className="text-2xl font-bold text-foreground">
+              <div className="min-w-0">
+                <h1 className="text-lg md:text-2xl font-bold text-foreground truncate">
                   Kitchen Orders
                 </h1>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-xs md:text-sm text-muted-foreground">
                   {activeOrders.length} active order
                   {activeOrders.length !== 1 ? "s" : ""}
                 </p>
               </div>
             </div>
-            <div className="flex gap-4">
-              <div className="text-center px-4 py-2 rounded-lg bg-amber-50 border border-amber-200">
-                <p className="text-2xl font-bold text-amber-600">
+            <div className="hidden md:flex gap-3 items-center flex-shrink-0">
+              <div className="text-center px-3 md:px-4 py-2 rounded-lg bg-amber-50 border border-amber-200">
+                <p className="text-xl md:text-2xl font-bold text-amber-600">
                   {pendingOrders.length}
                 </p>
                 <p className="text-xs text-amber-700">Pending</p>
               </div>
-              <div className="text-center px-4 py-2 rounded-lg bg-blue-50 border border-blue-200">
-                <p className="text-2xl font-bold text-blue-600">
+              <div className="text-center px-3 md:px-4 py-2 rounded-lg bg-blue-50 border border-blue-200">
+                <p className="text-xl md:text-2xl font-bold text-blue-600">
                   {preparingOrders.length}
                 </p>
                 <p className="text-xs text-blue-700">Preparing</p>
@@ -302,12 +317,35 @@ export function KitchenView({ onLogout }: KitchenViewProps) {
               <Button
                 variant="outline"
                 size="sm"
-                className="self-center gap-2 text-muted-foreground hover:text-foreground"
+                className="gap-2 text-muted-foreground hover:text-foreground"
                 onClick={onLogout}
               >
                 <LogOut className="h-4 w-4" />
-                <span className="hidden sm:inline">Logout</span>
+                <span>Logout</span>
               </Button>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              className="md:hidden gap-1 text-muted-foreground hover:text-foreground flex-shrink-0 text-xs px-2"
+              onClick={onLogout}
+            >
+              <LogOut className="h-3 w-3" />
+            </Button>
+          </div>
+          {/* Mobile Stats */}
+          <div className="grid grid-cols-2 gap-2 mt-3 md:hidden">
+            <div className="text-center px-2 py-1 rounded-lg bg-amber-50 border border-amber-200">
+              <p className="text-lg font-bold text-amber-600">
+                {pendingOrders.length}
+              </p>
+              <p className="text-[10px] text-amber-700">Pending</p>
+            </div>
+            <div className="text-center px-2 py-1 rounded-lg bg-blue-50 border border-blue-200">
+              <p className="text-lg font-bold text-blue-600">
+                {preparingOrders.length}
+              </p>
+              <p className="text-[10px] text-blue-700">Preparing</p>
             </div>
           </div>
         </div>

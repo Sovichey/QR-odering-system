@@ -70,7 +70,7 @@ export function StaffLoginModal({
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[400px]">
-        <DialogHeader className="sr-only">
+        <DialogHeader>
           <DialogTitle>Staff Login</DialogTitle>
           <DialogDescription>
             Select your role and enter your PIN to access the staff dashboard.
