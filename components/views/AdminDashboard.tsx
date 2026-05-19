@@ -166,7 +166,7 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
             <CardTitle>Order History</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="w-full rounded-md border overflow-auto">
+            <div className="w-full rounded-md border">
               <div className="h-[400px] overflow-auto">
                 <table className="w-full min-w-max">
                   <thead className="sticky top-0 bg-background">
