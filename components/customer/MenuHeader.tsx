@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { ShoppingBag, ClipboardList, UserCog, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRestaurant } from "@/context/RestaurantContext";
@@ -27,14 +28,17 @@ export function MenuHeader({
       <div className="container mx-auto px-5 py-3">
         <div className="flex items-center justify-between">
           {/* Logo / Brand */}
-          <div
-            className="flex items-center gap-4 cursor-pointer hover:opacity-80 transition-opacity"
-            onClick={onChangeTable}
-            title="Click to change table"
-          >
+          <div className="flex items-center gap-4">
+            <Image
+              src="/foodfavicon.png"
+              alt="QUICKBITE Logo"
+              width={48}
+              height={48}
+              className="rounded-lg"
+            />
             <div className="flex flex-col gap-1">
               <h1 className="text-2xl font-serif font-bold bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent tracking-tight leading-none">
-                The Menu
+                QUICKBITE
               </h1>
               <div className="flex items-baseline gap-2">
                 <span className="text-sm uppercase tracking-widest text-muted-foreground/80 font-semibold">

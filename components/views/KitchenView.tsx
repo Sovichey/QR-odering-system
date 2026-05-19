@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import {
   Clock,
   ChefHat,
@@ -288,12 +289,16 @@ export function KitchenView({ onLogout }: KitchenViewProps) {
         <div className="container mx-auto px-4 py-3 md:py-4">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2 md:gap-3 min-w-0">
-              <div className="h-8 md:h-10 w-8 md:w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <ChefHat className="h-4 md:h-5 w-4 md:w-5 text-primary" />
-              </div>
+              <Image
+                src="/foodfavicon.png"
+                alt="QUICKBITE Logo"
+                width={40}
+                height={40}
+                className="rounded-lg flex-shrink-0"
+              />
               <div className="min-w-0">
                 <h1 className="text-lg md:text-2xl font-bold text-foreground truncate">
-                  Kitchen Orders
+                  QUICKBITE - Kitchen
                 </h1>
                 <p className="text-xs md:text-sm text-muted-foreground">
                   {activeOrders.length} active order

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import {
   DollarSign,
   Users,
@@ -96,12 +97,18 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
         <div className="container mx-auto px-4 py-3 md:py-4">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
-              <div className="h-8 md:h-10 w-8 md:w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <LayoutDashboard className="h-4 md:h-5 w-4 md:w-5 text-primary" />
+              <div className="h-8 md:h-10 w-8 md:w-10 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Image
+                  src="/foodfavicon.png"
+                  alt="QUICKBITE Logo"
+                  width={32}
+                  height={32}
+                  className="rounded-md"
+                />
               </div>
               <div className="min-w-0">
                 <h1 className="text-lg md:text-2xl font-bold text-foreground truncate">
-                  Admin Dashboard
+                  QUICKBITE - Admin
                 </h1>
                 <p className="text-xs md:text-sm text-muted-foreground truncate">
                   Restaurant overview and analytics

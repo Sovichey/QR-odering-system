@@ -47,16 +47,18 @@ export function MenuCategories({
                   key={category.id}
                   onClick={() => onCategoryChange(category.id)}
                   className={cn(
-                    "flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 shrink-0",
+                    "flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 shrink-0 group",
                     isActive
-                      ? "bg-foreground text-background shadow-sm"
-                      : "bg-secondary/80 text-foreground/70 hover:bg-secondary hover:text-foreground",
+                      ? "bg-amber-800 text-white shadow-sm"
+                      : "bg-secondary/80 text-foreground/70 hover:bg-amber-700 hover:text-white",
                   )}
                 >
                   <Icon
                     className={cn(
                       "h-4 w-4",
-                      isActive ? "text-background" : "text-foreground/50",
+                      isActive
+                        ? "text-white"
+                        : "text-foreground/50 group-hover:text-white",
                     )}
                   />
                   {category.label}
