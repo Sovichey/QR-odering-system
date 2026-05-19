@@ -59,6 +59,7 @@ function CustomerContent({
         <CustomerMenuView
           onStaffLogin={() => setLoginModalOpen(true)}
           onChangeTable={onChangeTable}
+          staffLoginOpen={loginModalOpen}
         />
       )}
 

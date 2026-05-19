@@ -1,21 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import {
-  ShoppingBag,
-  ClipboardList,
-  UserCog,
-  Menu,
-  LogOut,
-} from "lucide-react";
+import { ShoppingBag, ClipboardList, UserCog, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import { useRestaurant } from "@/context/RestaurantContext";
 
 interface MenuHeaderProps {
@@ -35,7 +21,6 @@ export function MenuHeader({
   const myActiveOrders = orders.filter(
     (o) => o.tableNumber === tableNumber && o.status !== "Completed",
   );
-  const [open, setOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 bg-background border-b border-border/50">
@@ -122,98 +107,16 @@ export function MenuHeader({
             </Button>
           </div>
 
-          {/* Mobile Menu */}
-          <div className="md:hidden">
-            <Sheet open={open} onOpenChange={setOpen}>
-              <SheetTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="h-11 w-11 rounded-full"
-                >
-                  <Menu className="h-5 w-5" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent
-                side="right"
-                className="w-[280px] p-0 flex flex-col"
-              >
-                <SheetHeader className="border-b border-border/50 px-6 py-5 sticky top-0 bg-background/95 backdrop-blur-sm">
-                  <SheetTitle className="text-lg font-semibold">
-                    Menu
-                  </SheetTitle>
-                </SheetHeader>
-                <div className="flex flex-col gap-3 mt-6 px-4 flex-1 pb-6">
-                  <div className="space-y-2">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-2">
-                      Main
-                    </p>
-                    <Button
-                      variant="ghost"
-                      className="w-full justify-start text-base h-11 px-4 rounded-lg hover:bg-muted/50 text-foreground"
-                      onClick={() => {
-                        onChangeTable();
-                        setOpen(false);
-                      }}
-                    >
-                      <LogOut className="h-5 w-5 mr-3 text-muted-foreground" />
-                      <span>Change Table</span>
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      className="w-full justify-start text-base h-11 px-4 rounded-lg hover:bg-muted/50 text-foreground"
-                      onClick={() => {
-                        onStaffLogin();
-                        setOpen(false);
-                      }}
-                    >
-                      <UserCog className="h-5 w-5 mr-3 text-muted-foreground" />
-                      <span>Staff Login</span>
-                    </Button>
-                  </div>
-
-                  <div className="border-t border-border/30 my-2" />
-
-                  <div className="space-y-2">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-2">
-                      Orders & Cart
-                    </p>
-                    <Button
-                      className="w-full justify-start text-base relative h-11 px-4 rounded-lg bg-green-600 hover:bg-green-700 text-white transition-colors"
-                      onClick={() => {
-                        onOrdersClick();
-                        setOpen(false);
-                      }}
-                    >
-                      <ClipboardList className="h-5 w-5 mr-3" />
-                      <span>Orders</span>
-                      {myActiveOrders.length > 0 && (
-                        <span className="ml-auto bg-white/20 text-white px-2.5 py-1 rounded-full text-xs font-semibold">
-                          {myActiveOrders.length}
-                        </span>
-                      )}
-                    </Button>
-
-                    <Button
-                      className="w-full justify-start text-base h-11 px-4 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground transition-colors"
-                      onClick={() => {
-                        onCartClick();
-                        setOpen(false);
-                      }}
-                    >
-                      <ShoppingBag className="h-5 w-5 mr-3" />
-                      <span>Cart</span>
-                      {cartItemCount > 0 && (
-                        <span className="ml-auto bg-white/20 text-white px-2.5 py-1 rounded-full text-xs font-semibold">
-                          {cartItemCount}
-                        </span>
-                      )}
-                    </Button>
-                  </div>
-                </div>
-              </SheetContent>
-            </Sheet>
-          </div>
+          {/* Mobile - Change Table Button */}
+          <Button
+            variant="outline"
+            size="icon"
+            className="md:hidden h-10 w-10 rounded-full"
+            onClick={onChangeTable}
+            title="Change table number"
+          >
+            <LogOut className="h-4 w-4" />
+          </Button>
         </div>
       </div>
     </header>
