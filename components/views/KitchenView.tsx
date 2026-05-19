@@ -317,7 +317,7 @@ export function KitchenView({ onLogout }: KitchenViewProps) {
               <Button
                 variant="outline"
                 size="sm"
-                className="gap-2 text-muted-foreground hover:text-foreground"
+                className="gap-2 text-muted-foreground hover:text-red-600 hover:bg-red-50 hover:border-red-200 transition-colors"
                 onClick={onLogout}
               >
                 <LogOut className="h-4 w-4" />
@@ -327,7 +327,7 @@ export function KitchenView({ onLogout }: KitchenViewProps) {
             <Button
               variant="outline"
               size="sm"
-              className="md:hidden gap-1 text-muted-foreground hover:text-foreground flex-shrink-0 text-xs px-2"
+              className="md:hidden gap-1 text-muted-foreground hover:text-red-600 hover:bg-red-50 hover:border-red-200 transition-colors flex-shrink-0 text-xs px-2"
               onClick={onLogout}
             >
               <LogOut className="h-3 w-3" />

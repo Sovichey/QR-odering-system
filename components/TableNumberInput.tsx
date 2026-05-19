@@ -162,7 +162,7 @@ export function TableNumberInput({
               variant="outline"
               size="sm"
               onClick={onStaffLogin}
-              className="w-full gap-2 text-xs font-medium"
+              className="w-full gap-2 text-xs font-medium hover:bg-primary/10 hover:text-primary hover:border-primary transition-colors"
             >
               <Lock className="h-3.5 w-3.5" />
               Staff Login (PIN)

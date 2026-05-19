@@ -111,7 +111,7 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
             <Button
               variant="outline"
               size="sm"
-              className="gap-1 md:gap-2 text-muted-foreground hover:text-foreground flex-shrink-0 text-xs md:text-sm px-2 md:px-3"
+              className="gap-1 md:gap-2 text-muted-foreground hover:text-red-600 hover:bg-red-50 hover:border-red-200 transition-colors flex-shrink-0 text-xs md:text-sm px-2 md:px-3"
               onClick={onLogout}
             >
               <LogOut className="h-3 md:h-4 w-3 md:w-4" />
