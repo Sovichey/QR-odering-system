@@ -2,6 +2,12 @@
 
 A modern, real-time restaurant ordering and management system built with Next.js, React, and Firebase. Features separate interfaces for customers to browse and order meals, staff login, and kitchen management views with live order tracking.
 
+## Scan Poster
+
+Use this poster for table signs, counters, or printed menus so customers can scan and open the ordering system.
+
+<img src="public/Scan%20And%20Order.png" alt="QUICKBITE scan and order poster" width="420" />
+
 ---
 
 ## ✨ Features
