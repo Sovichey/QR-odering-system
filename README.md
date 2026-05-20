@@ -1,440 +1,110 @@
-# 🍽️ Restaurant Ordering System
+# QUICKBITE Restaurant Ordering System
 
-A modern, real-time restaurant ordering and management system built with Next.js, React, and Firebase. Features separate interfaces for customers to browse and order meals, staff login, and kitchen management views with live order tracking.
+QUICKBITE is a restaurant ordering and order management web application built for table-service restaurants. Customers can scan a QR poster, choose their table number, browse the menu, place orders, and follow order progress in real time. Staff can access separate kitchen and admin views to manage active orders and monitor restaurant activity.
+
+## Project Overview
+
+The project focuses on three main workflows:
+
+- Customer ordering from a mobile-friendly menu
+- Kitchen order handling with live status updates
+- Admin visibility into revenue, active tables, completed orders, and order history
+
+It is designed as a single-page restaurant system with role-based views. Customers use the menu view, kitchen staff use the kitchen queue, and administrators use the dashboard.
 
 ## Scan Poster
 
-Use this poster for table signs, counters, or printed menus so customers can scan and open the ordering system.
+The repository includes a scan-and-order poster asset that can be used for table signs, counters, or printed menus.
 
 <img src="public/Scan%20And%20Order.png" alt="QUICKBITE scan and order poster" width="420" />
 
----
-
-## ✨ Features
-
-- **Customer Interface**
-  - Browse restaurant menu with categories
-  - Add items to cart with quantity selection
-  - View active orders in real-time
-  - Responsive design optimized for all devices
-
-- **Staff Management**
-  - Secure staff login system
-  - Real-time order notifications
-  - Order status tracking (Pending → Preparing → Completed)
-
-- **Kitchen View**
-  - Real-time order queue display
-  - Update order status
-  - Live synchronization across devices
-
-- **Admin Dashboard**
-  - Manage meals and categories
-  - View order analytics
-  - System configuration
-
-- **Real-time Updates**
-  - Firebase Firestore for live data synchronization
-  - Instant order status updates across all views
-  - WebSocket-like experience without polling
-
----
-
-## 🛠️ Tech Stack
-
-- **Frontend Framework**: [Next.js 16](https://nextjs.org/) - React framework for production
-- **UI Components**: [Radix UI](https://www.radix-ui.com/) - Unstyled, accessible component primitives
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
-- **Database**: [Firebase Firestore](https://firebase.google.com/docs/firestore) - Real-time cloud database
-- **Authentication**: Firebase Authentication
-- **Form Handling**: [React Hook Form](https://react-hook-form.com/) with [Zod](https://zod.dev/) validation
-- **Icons**: [Lucide React](https://lucide.dev/) - Beautiful SVG icons
-- **Notifications**: [Sonner](https://sonner.emilkowal.ski/) - Toast notification library
-- **Analytics**: [Vercel Analytics](https://vercel.com/analytics)
-- **Package Manager**: [pnpm](https://pnpm.io/)
-
----
-
-## 📋 Prerequisites
-
-Before you begin, ensure you have the following installed:
-
-- **Node.js** 18.17 or later
-- **pnpm** 8.0 or later (install with `npm install -g pnpm`)
-- **Firebase Project** (create free at [firebase.google.com](https://firebase.google.com))
-- **Vercel Account** (optional, for deployment - sign up at [vercel.com](https://vercel.com))
-
----
-
-## 🚀 Getting Started
-
-### 1. Clone the Repository
-
-```bash
-git clone <your-repo-url>
-cd restaurant-ordering-system
-```
-
-### 2. Install Dependencies
-
-```bash
-pnpm install
-```
-
-### 3. Configure Firebase
-
-1. Go to [Firebase Console](https://console.firebase.google.com)
-2. Create a new project (or use existing one)
-3. Enable Firestore Database:
-   - Go to **Firestore Database**
-   - Click **Create database**
-   - Select **Production mode**
-   - Choose your preferred region
-   - Click **Create**
-
-4. Get your Firebase credentials:
-   - Go to **Project Settings** (gear icon)
-   - Click **Service Accounts**
-   - Copy your credentials or create a web app to get the config
-
-5. Create `.env.local` file:
-
-```bash
-cp .env.local.example .env.local
-```
-
-6. Fill in your Firebase credentials in `.env.local`:
-
-```env
-NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
-```
-
-### 4. Configure Firestore Rules
-
-In Firebase Console, go to **Firestore > Rules** and set:
-
-```javascript
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /orders/{document=**} {
-      allow read, write: if true;
-    }
-    match /meals/{document=**} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
-  }
-}
-```
-
-> **Note**: For production, implement proper authentication and authorization rules.
-
----
-
-## 💻 Development
-
-### Start Development Server
-
-```bash
-pnpm dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) to view the application.
-
-The page will auto-refresh as you make changes.
-
-### Available Scripts
-
-```bash
-# Start development server
-pnpm dev
-
-# Build for production
-pnpm build
-
-# Start production server
-pnpm start
-
-# Run linter
-pnpm lint
-```
-
----
-
-## 📁 Project Structure
-
-```
-restaurant-ordering-system/
-├── app/                           # Next.js app directory
-│   ├── layout.tsx                # Root layout with providers
-│   ├── page.tsx                  # Home page/main entry
-│   └── globals.css               # Global styles
-├── components/                   # React components
-│   ├── RestaurantSystem.tsx      # Main app component
-│   ├── TableNumberInput.tsx      # Table selection
-│   ├── theme-provider.tsx        # Theme configuration
-│   ├── customer/                 # Customer interface
-│   │   ├── MealCard.tsx
-│   │   ├── MealGrid.tsx
-│   │   ├── MenuCategories.tsx
-│   │   ├── MenuHeader.tsx
-│   │   ├── CartModal.tsx
-│   │   └── ActiveOrders.tsx
-│   ├── staff/                    # Staff interface
-│   │   └── StaffLoginModal.tsx
-│   ├── views/                    # Full-page views
-│   │   ├── CustomerMenuView.tsx
-│   │   ├── KitchenView.tsx
-│   │   └── AdminDashboard.tsx
-│   └── ui/                       # Reusable UI components (Radix UI)
-├── context/                      # React Context
-│   └── RestaurantContext.tsx     # Global app state & Firebase logic
-├── hooks/                        # Custom React hooks
-│   ├── use-mobile.ts
-│   └── use-toast.ts
-├── lib/                          # Utilities & configuration
-│   ├── firebase.ts               # Firebase initialization
-│   ├── types.ts                  # TypeScript types
-│   ├── utils.ts                  # Helper utilities
-│   ├── data/
-│   │   ├── mockMeals.ts
-│   │   └── mockOrders.ts
-│   └── utils/
-│       └── helpers.ts
-├── public/                       # Static assets
-├── styles/                       # Global styles
-├── package.json
-├── tsconfig.json
-├── next.config.mjs
-├── tailwind.config.ts
-├── components.json               # Shadcn/ui config
-└── README.md
-```
-
----
-
-## 🔒 Environment Variables
-
-The application uses the following environment variables (all public for Firebase):
-
-| Variable                                   | Description                  |
-| ------------------------------------------ | ---------------------------- |
-| `NEXT_PUBLIC_FIREBASE_API_KEY`             | Firebase API key             |
-| `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`         | Firebase auth domain         |
-| `NEXT_PUBLIC_FIREBASE_PROJECT_ID`          | Firebase project ID          |
-| `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET`      | Firebase storage bucket      |
-| `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID` | Firebase messaging sender ID |
-| `NEXT_PUBLIC_FIREBASE_APP_ID`              | Firebase app ID              |
-
-> **Security Note**: The `NEXT_PUBLIC_` prefix means these variables are exposed in the browser. Always secure your Firestore with proper security rules, not just environment variables.
-
----
-
-## 🌐 Deployment with Vercel
-
-Vercel provides the easiest and fastest way to deploy Next.js applications.
-
-### Option 1: Deploy via Git (Recommended)
-
-1. **Push your code to GitHub/GitLab/Bitbucket**
-
-```bash
-git push origin main
-```
-
-2. **Connect to Vercel**
-   - Go to [vercel.com](https://vercel.com)
-   - Click **"Add New..."** → **"Project"**
-   - Import your repository
-   - Select your repository and click **Import**
-
-3. **Configure Environment Variables**
-   - In the Vercel dashboard, go to **Settings** → **Environment Variables**
-   - Add all your Firebase environment variables:
-     ```
-     NEXT_PUBLIC_FIREBASE_API_KEY
-     NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
-     NEXT_PUBLIC_FIREBASE_PROJECT_ID
-     NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
-     NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
-     NEXT_PUBLIC_FIREBASE_APP_ID
-     ```
-   - Click **Save**
-
-4. **Deploy**
-   - Click **Deploy**
-   - Wait for the build to complete
-   - Your site will be live at `https://your-project.vercel.app`
-
-### Option 2: Deploy via CLI
-
-1. **Install Vercel CLI**
-
-```bash
-npm i -g vercel
-```
-
-2. **Deploy**
-
-```bash
-vercel
-```
-
-3. **Add Environment Variables**
-
-```bash
-vercel env add NEXT_PUBLIC_FIREBASE_API_KEY
-vercel env add NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
-# ... add all other variables
-```
-
-4. **Deploy to Production**
-
-```bash
-vercel --prod
-```
-
-### Post-Deployment Configuration
-
-After deploying to Vercel:
-
-1. **Update Firebase Security Rules** (if needed)
-   - Add your Vercel domain to CORS allowed origins in Firebase
-
-2. **Custom Domain** (optional)
-   - In Vercel dashboard: **Settings** → **Domains**
-   - Add your custom domain
-   - Update DNS records as instructed
-
-3. **Monitor Analytics**
-   - Go to **Analytics** in Vercel dashboard
-   - Track your application's performance
-
-### Environment Variables in Vercel
-
-To manage environment variables:
-
-```bash
-# View current environment variables
-vercel env list
-
-# Add a new variable
-vercel env add NEXT_PUBLIC_FIREBASE_API_KEY
-
-# Remove a variable
-vercel env remove NEXT_PUBLIC_FIREBASE_API_KEY
-
-# Pull environment variables from Vercel
-vercel env pull
-```
-
----
-
-## 🧪 Testing
-
-### Build Locally
-
-Before deploying, test the production build locally:
-
-```bash
-pnpm build
-pnpm start
-```
-
-Then visit [http://localhost:3000](http://localhost:3000)
-
----
-
-## 📱 Features Walkthrough
-
-### Customer View
-
-- Enter table number to get started
-- Browse menu items by category
-- Add items to cart and view your active orders
-- Real-time order status updates
-
-### Staff Login
-
-- Secure staff portal with login
-- View all orders
-- Update order statuses
+## Main Features
+
+### Customer Menu
+
+- Table number entry before ordering
+- Categorized menu browsing
+- Meal cards with images, descriptions, prices, and preparation time
+- Cart management with quantity updates
+- Optional order notes for special instructions
+- Active order tracking
+- Mobile bottom navigation for menu, cart, orders, and staff access
 
 ### Kitchen View
 
-- See all pending and preparing orders
-- Mark orders as completed
-- Real-time notification system
+- Real-time active order queue
+- Pending and preparing order counters
+- Grid and list layouts for desktop kitchen screens
+- Order cards grouped by table number
+- Special instruction display
+- Status flow from `Pending` to `Preparing` to `Completed`
 
 ### Admin Dashboard
 
-- Manage menu items and categories
-- View order analytics
-- System configuration options
+- Restaurant KPI cards for revenue, active tables, completed orders, and average prep time
+- Combined order history table
+- Status badges for pending, preparing, and completed orders
+- Responsive dashboard layout for desktop and mobile use
 
----
+### Staff Access
 
-## 🐛 Troubleshooting
+- Staff login modal with role selection
+- Kitchen role for order preparation
+- Admin role for analytics and order history
+- Demo PIN-based access for project presentation and testing
 
-### Issue: "Firebase is not initialized"
+## Data Flow
 
-**Solution**: Ensure `.env.local` is properly configured with all Firebase credentials.
+The app keeps customer cart and selected table data in browser storage so the ordering session can continue across page refreshes. Orders are stored in Firestore and synchronized through real-time listeners, allowing customer, kitchen, and admin views to stay updated without manual refreshes.
 
-### Issue: "CORS error when accessing Firestore"
+Menu items currently come from local mock meal data, while live orders are read from and written to the `orders` collection.
 
-**Solution**: Check your Firestore security rules and ensure they allow read/write access as configured in the rules above.
+## Order Lifecycle
 
-### Issue: "Environment variables not loading"
+1. A customer selects a table and adds meals to the cart.
+2. The customer places an order with optional notes.
+3. The order appears in the kitchen view as `Pending`.
+4. Kitchen staff start the order, changing it to `Preparing`.
+5. Kitchen staff complete the order, changing it to `Completed`.
+6. The admin dashboard includes the order in restaurant metrics and order history.
 
-**Solution**:
+## Tech Stack
 
-- Restart the development server after changing `.env.local`
-- Ensure variables use the `NEXT_PUBLIC_` prefix for browser access
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS
+- Radix UI components
+- Firebase Firestore
+- Lucide React icons
+- Sonner notifications
+- Vercel Analytics
 
-### Issue: "Build fails on Vercel"
+## Project Structure
 
-**Solution**:
+```text
+app/                         Next.js app entry, layout, and global styles
+components/                  Application and UI components
+components/customer/         Customer menu, cart, categories, and active orders
+components/staff/            Staff login flow
+components/views/            Customer, kitchen, and admin screens
+components/ui/               Shared reusable UI components
+context/                     Restaurant state, cart logic, and order actions
+hooks/                       Shared React hooks
+lib/                         Firebase config, types, helpers, and mock data
+public/                      Static assets, logo, QR poster, and images
+styles/                      Additional global styling
+```
 
-- Check build logs in Vercel dashboard
-- Ensure all environment variables are set
-- Verify Node.js version compatibility (18.17+)
-- Run `pnpm build` locally to identify issues
+## Key Files
 
----
+- `components/RestaurantSystem.tsx` controls the main view switching between customer, kitchen, and admin experiences.
+- `context/RestaurantContext.tsx` manages menu data, cart state, order placement, order updates, and real-time Firestore syncing.
+- `components/views/CustomerMenuView.tsx` renders the customer ordering interface.
+- `components/views/KitchenView.tsx` renders the kitchen order queue.
+- `components/views/AdminDashboard.tsx` renders restaurant metrics and order history.
+- `components/staff/StaffLoginModal.tsx` handles role selection and staff PIN login.
 
-## 📚 Additional Resources
+## Project Purpose
 
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Firebase Documentation](https://firebase.google.com/docs)
-- [Tailwind CSS Docs](https://tailwindcss.com/docs)
-- [Radix UI Components](https://www.radix-ui.com/docs/primitives/overview/introduction)
-- [Vercel Documentation](https://vercel.com/docs)
-- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
-
----
-
-## 📝 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
----
-
-## 📞 Support
-
-For issues, questions, or suggestions, please open an issue on the repository.
-
----
-
-**Happy ordering! 🍕🍔🍜**
+QUICKBITE demonstrates a practical restaurant ordering workflow where customers can order from their own device and staff can manage orders instantly from dedicated views. It is suitable for showcasing real-time ordering, role-based interfaces, responsive UI design, and restaurant operations management in a modern web app.
