@@ -33,9 +33,9 @@ export function MenuCategories({
   onCategoryChange,
 }: MenuCategoriesProps) {
   return (
-    <div className="fixed top-[75px] left-0 right-0 z-40 bg-background border-b border-border">
+    <div className="bg-background border-b border-border">
       <div className="container mx-auto px-5">
-        <div className="py-6">
+        <div className="py-4">
           {/* Scrollable categories */}
           <div className="flex gap-2 overflow-x-auto scrollbar-hide">
             {categories.map((category) => {

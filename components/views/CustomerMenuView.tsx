@@ -37,22 +37,24 @@ export function CustomerMenuView({
 
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0">
-      <MenuHeader
-        onCartClick={() => {
-          setCartOpen(true);
-          setActiveNavTab("cart");
-        }}
-        onOrdersClick={() => {
-          setOrdersOpen(true);
-          setActiveNavTab("orders");
-        }}
-        onStaffLogin={onStaffLogin}
-        onChangeTable={onChangeTable}
-      />
-      <MenuCategories
-        activeCategory={activeCategory}
-        onCategoryChange={setActiveCategory}
-      />
+      <div className="sticky top-0 z-50 bg-background shadow-sm">
+        <MenuHeader
+          onCartClick={() => {
+            setCartOpen(true);
+            setActiveNavTab("cart");
+          }}
+          onOrdersClick={() => {
+            setOrdersOpen(true);
+            setActiveNavTab("orders");
+          }}
+          onStaffLogin={onStaffLogin}
+          onChangeTable={onChangeTable}
+        />
+        <MenuCategories
+          activeCategory={activeCategory}
+          onCategoryChange={setActiveCategory}
+        />
+      </div>
       <main className="container mx-auto px-4 py-6">
         <MealGrid meals={meals} activeCategory={activeCategory} />
       </main>
