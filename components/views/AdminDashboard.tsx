@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useRef } from "react";
 import {
   DollarSign,
   Users,
@@ -12,18 +13,74 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useRestaurant } from "@/context/RestaurantContext";
 import { formatCurrency, formatTimestamp } from "@/lib/utils/helpers";
 import { cn } from "@/lib/utils";
+
+function AxisLockedScroll({ children }: { children: React.ReactNode }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const touchRef = useRef({
+    startX: 0,
+    startY: 0,
+    startScrollLeft: 0,
+    startScrollTop: 0,
+    axis: null as "x" | "y" | null,
+  });
+
+  return (
+    <div
+      ref={scrollRef}
+      className="h-[400px] overflow-auto overscroll-contain"
+      style={{ touchAction: "none", WebkitOverflowScrolling: "touch" }}
+      onTouchStart={(event) => {
+        const touch = event.touches[0];
+        const scrollElement = scrollRef.current;
+
+        if (!touch || !scrollElement) return;
+
+        touchRef.current = {
+          startX: touch.clientX,
+          startY: touch.clientY,
+          startScrollLeft: scrollElement.scrollLeft,
+          startScrollTop: scrollElement.scrollTop,
+          axis: null,
+        };
+      }}
+      onTouchMove={(event) => {
+        const touch = event.touches[0];
+        const scrollElement = scrollRef.current;
+
+        if (!touch || !scrollElement) return;
+
+        const state = touchRef.current;
+        const deltaX = touch.clientX - state.startX;
+        const deltaY = touch.clientY - state.startY;
+
+        if (!state.axis && Math.max(Math.abs(deltaX), Math.abs(deltaY)) > 6) {
+          state.axis = Math.abs(deltaX) > Math.abs(deltaY) ? "x" : "y";
+        }
+
+        if (!state.axis) return;
+
+        event.preventDefault();
+
+        if (state.axis === "x") {
+          scrollElement.scrollLeft = state.startScrollLeft - deltaX;
+        } else {
+          scrollElement.scrollTop = state.startScrollTop - deltaY;
+        }
+      }}
+      onTouchEnd={() => {
+        touchRef.current.axis = null;
+      }}
+      onTouchCancel={() => {
+        touchRef.current.axis = null;
+      }}
+    >
+      {children}
+    </div>
+  );
+}
 
 interface KPICardProps {
   title: string;
@@ -167,7 +224,7 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
           </CardHeader>
           <CardContent>
             <div className="w-full rounded-md border">
-              <div className="h-[400px] overflow-auto">
+              <AxisLockedScroll>
                 <table className="w-full min-w-max">
                   <thead className="sticky top-0 bg-background">
                     <tr className="border-b">
@@ -230,7 +287,7 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
                     ))}
                   </tbody>
                 </table>
-              </div>
+              </AxisLockedScroll>
             </div>
           </CardContent>
         </Card>
