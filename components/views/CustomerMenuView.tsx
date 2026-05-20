@@ -53,7 +53,7 @@ export function CustomerMenuView({
         activeCategory={activeCategory}
         onCategoryChange={setActiveCategory}
       />
-      <main className="container mx-auto px-4 py-6 mt-12">
+      <main className="container mx-auto px-4 py-6">
         <MealGrid meals={meals} activeCategory={activeCategory} />
       </main>
       <CartModal
